@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Door Cipher</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: #000;
+      color: #eaeaea;
+      font-family: 'Roboto Mono', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Spotlight effect */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 50% 45%, #222 0%, #000 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    /* Door illustration */
+    .door {
+      width: 140px;
+      height: 280px;
+      background: #eaeaea;
+      border-radius: 4px;
+      box-shadow: 0 0 40px 10px #fff, 0 0 0 1000px #000a;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: doorAppear 2s cubic-bezier(0.7,0,0.3,1);
+    }
+    @keyframes doorAppear {
+      from { opacity: 0; transform: scale(1.2) translateY(60px);}
+      to { opacity: 1; transform: scale(1) translateY(0);}
+    }
+    .door::before, .door::after {
+      content: "";
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      height: 24px;
+      background: #d0d0d0;
+      border-radius: 2px;
+    }
+    .door::before {
+      top: 28px;
+    }
+    .door::after {
+      bottom: 56px;
+    }
+    .knob {
+      position: absolute;
+      right: 20px;
+      bottom: 90px;
+      width: 16px;
+      height: 8px;
+      background: #bbb;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #999;
+    }
+    /* Main content styles */
+    h1 {
+      color: #fff;
+      font-size: 2.1em;
+      letter-spacing: 0.09em;
+      text-align: center;
+      margin-bottom: 12px;
+      margin-top: 0;
+      z-index: 1;
+      text-shadow: 0 0 16px #fff4, 0 0 2px #fff9;
+      font-weight: 700;
+      animation: fadeIn 2.2s 1.2s backwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    p {
+      color: #aaa;
+      text-align: center;
+      margin-bottom: 30px;
+      z-index: 1;
+      font-size: 1.08em;
+      animation: fadeIn 2.5s 1.6s backwards;
+    }
+    textarea {
+      width: 100%;
+      max-width: 420px;
+      margin: 15px 0;
+      padding: 15px;
+      background: #191919;
+      color: #eaeaea;
+      border: 1px solid #444;
+      border-radius: 5px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      transition: border-color 0.3s;
+      z-index: 1;
+      box-shadow: 0 2px 16px #000a;
+      resize: vertical;
+      animation: fadeIn 2.7s 2s backwards;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: #fff;
+      box-shadow: 0 0 10px #fff4;
+    }
+    button {
+      width: 48%;
+      margin: 10px 1%;
+      padding: 12px;
+      background: #222;
+      color: #eaeaea;
+      border: 1px solid #444;
+      border-radius: 5px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+      z-index: 1;
+      box-shadow: 0 2px 16px #0004;
+      animation: fadeIn 2.8s 2.3s backwards;
+      position: relative;
+      overflow: hidden;
+    }
+    button:hover {
+      background: #fff;
+      color: #111;
+      border-color: #fff;
+    }
+    #outputText {
+      animation: fadeIn 2.9s 2.7s backwards;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #555;
+      font-size: 12px;
+      letter-spacing: 0.07em;
+      z-index: 1;
+      animation: fadeIn 3s 2.8s backwards;
+    }
+    /* Subtle moving shadow on the floor */
+    .floor-shadow {
+      position: absolute;
+      top: 330px;
+      left: 50%;
+      width: 380px;
+      height: 60px;
+      background: radial-gradient(ellipse at center, #222 40%, #000 100%);
+      transform: translateX(-50%);
+      filter: blur(6px) opacity(0.7);
+      z-index: 0;
+      animation: shadowPulse 4s infinite alternate;
+    }
+    @keyframes shadowPulse {
+      from { filter: blur(6px) opacity(0.7);}
+      to { filter: blur(12px) opacity(0.9);}
+    }
+  </style>
+</head>
+<body>
+  <div class="door">
+    <div class="knob"></div>
+  </div>
+  <div class="floor-shadow"></div>
+  <h1>scary</h1>
+  <p>translate some of the shit i might say<br>
+  <span style="color:#fff; font-size:0.95em; font-style:italic;">(the langauge can be learned, just find some patterns and shit)</span>
+  </p>
+  <textarea id="inputText" placeholder="slop"></textarea>
+  <div style="display: flex; justify-content: center; gap: 10px;">
+    <button onclick="translateToShifted()">Encode →</button>
+    <button onclick="translateToEnglish()">← Decode</button>
+  </div>
+  <textarea id="outputText" placeholder="Your translation appears here..." readonly></textarea>
+  <div class="footer">O</div>
+  <script>
+    function shiftLetter(char, direction) {
+      const code = char.charCodeAt(0);
+      if (code >= 65 && code <= 90) {
+        return String.fromCharCode(((code - 65 + (direction === 'forward' ? 1 : -1) + 26) % 26) + 65);
+      } else if (code >= 97 && code <= 122) {
+        return String.fromCharCode(((code - 97 + (direction === 'forward' ? 1 : -1) + 26) % 26) + 97);
+      } else {
+        return char;
+      }
+    }
+    function translateText(text, direction) {
+      return text.split('').map(char => shiftLetter(char, direction)).join('');
+    }
+    function translateToShifted() {
+      const input = document.getElementById('inputText').value;
+      document.getElementById('outputText').value = translateText(input, 'forward');
+    }
+    function translateToEnglish() {
+      const input = document.getElementById('inputText').value;
+      document.getElementById('outputText').value = translateText(input, 'backward');
+    }
+  </script>
+</body>
+</html>
