@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Door Cipher</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
@@ -133,7 +134,7 @@
       border-radius: 5px;
       font-family: 'Roboto Mono', monospace;
       font-size: 16px;
-      cursor: pointer;
+      cursor: button;
       transition: background 0.3s, color 0.3s, border-color 0.3s;
       z-index: 1;
       box-shadow: 0 2px 16px #0004;
@@ -149,10 +150,32 @@
     #outputText {
       animation: fadeIn 2.9s 2.7s backwards;
     }
+    .copy-btn {
+      width: 90%;
+      max-width: 420px;
+      margin: 10px auto;
+      padding: 12px;
+      background: #333;
+      color: #eaeaea;
+      border: 1px solid #444;
+      border-radius: 5px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+      z-index: 1;
+      box-shadow: 0 2px 16px #0004;
+      animation: fadeIn 2.9s 2.7s backwards;
+    }
+    .copy-btn:hover {
+      background: #fff;
+      color: #111;
+      border-color: #fff;
+    }
     .footer {
       text-align: center;
       margin-top: 40px;
-      color: #555;
+      color: 555;
       font-size: 12px;
       letter-spacing: 0.07em;
       z-index: 1;
@@ -175,6 +198,30 @@
       from { filter: blur(6px) opacity(0.7);}
       to { filter: blur(12px) opacity(0.9);}
     }
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      textarea, .copy-btn {
+        width: 90%;
+        max-width: 90%;
+        margin: 10px auto;
+      }
+      button {
+        width: 90%;
+        margin: 6px auto;
+      }
+      .door {
+        width: 100px;
+        height: 200px;
+        margin-bottom: 20px;
+      }
+      .floor-shadow {
+        width: 240px;
+        top: 240px;
+      }
+      h1 {
+        font-size: 1.6em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -187,11 +234,12 @@
   <span style="color:#fff; font-size:0.95em; font-style:italic;">(the langauge can be learned, just find some patterns and shit)</span>
   </p>
   <textarea id="inputText" placeholder="slop"></textarea>
-  <div style="display: flex; justify-content: center; gap: 10px;">
+  <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
     <button onclick="translateToShifted()">Encode →</button>
     <button onclick="translateToEnglish()">← Decode</button>
   </div>
   <textarea id="outputText" placeholder="Your translation appears here..." readonly></textarea>
+  <button id="copyButton" onclick="copyToClipboard()" class="copy-btn">Copy Output</button>
   <div class="footer">O</div>
   <script>
     function shiftLetter(char, direction) {
@@ -214,6 +262,13 @@
     function translateToEnglish() {
       const input = document.getElementById('inputText').value;
       document.getElementById('outputText').value = translateText(input, 'backward');
+    }
+    function copyToClipboard() {
+      const output = document.getElementById('outputText');
+      navigator.clipboard.writeText(output.value)
+        .catch(err => {
+          console.error('Failed to copy:', err);
+        });
     }
   </script>
 </body>
