@@ -245,9 +245,9 @@
     function shiftLetter(char, direction) {
       const code = char.charCodeAt(0);
       if (code >= 65 && code <= 90) {
-        return String.fromCharCode(((code - 65 + (direction === 'forward' ? 1 : -1) + 26) % 26) + 65);
+        return String.fromCharCode(((code - 65 + (direction === 'backward' ? 1 : -1) + 26) % 26) + 65);
       } else if (code >= 97 && code <= 122) {
-        return String.fromCharCode(((code - 97 + (direction === 'forward' ? 1 : -1) + 26) % 26) + 97);
+        return String.fromCharCode(((code - 97 + (direction === 'backward' ? 1 : -1) + 26) % 26) + 97);
       } else {
         return char;
       }
@@ -257,11 +257,11 @@
     }
     function translateToShifted() {
       const input = document.getElementById('inputText').value;
-      document.getElementById('outputText').value = translateText(input, 'forward');
+      document.getElementById('outputText').value = translateText(input, 'backward');
     }
     function translateToEnglish() {
       const input = document.getElementById('inputText').value;
-      document.getElementById('outputText').value = translateText(input, 'backward');
+      document.getElementById('outputText').value = translateText(input, 'forward');
     }
     function copyToClipboard() {
       const output = document.getElementById('outputText');
